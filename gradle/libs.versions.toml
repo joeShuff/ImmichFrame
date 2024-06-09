@@ -1,0 +1,141 @@
+[versions]
+agp = "8.3.1"
+kotlin = "1.9.0"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+androidxComposeBom = "2023.05.01"
+googleAccompanist = "0.34.0"
+material3Android = "1.2.1"
+roomVersion = "2.6.1"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0"
+coroutines-android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
+
+arrow-core = "io.arrow-kt:arrow-core:1.2.4"
+
+retrofit-lib =  "com.squareup.retrofit2:retrofit:2.11.0"
+retrofit-converter-gson = "com.squareup.retrofit2:converter-gson:2.11.0"
+
+okhttp-lib = "com.squareup.okhttp3:okhttp:4.12.0"
+okhttp-logging = "com.squareup.okhttp3:logging-interceptor:4.12.0"
+
+gson-lib = "com.google.code.gson:gson:2.10.1"
+
+dagger-hilt-lib = "com.google.dagger:hilt-android:2.49"
+dagger-hilt-compiler = "com.google.dagger:hilt-android-compiler:2.46.1"
+
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion"}
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
+
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
+
+datastore = "androidx.datastore:datastore-preferences:1.0.0"
+
+
+androidx-legacy-v4 = "androidx.legacy:legacy-support-v4:1.0.0"
+androidx-activity-ktx = "androidx.activity:activity-ktx:1.8.2"
+androidx-appcompat-ktx = "androidx.appcompat:appcompat:1.6.1"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.2"
+
+google-material = "com.google.android.material:material:1.11.0"
+
+google-firebase-messaging = "com.google.firebase:firebase-messaging-ktx:23.4.1"
+
+google-accompanist-insets-lib = "com.google.accompanist:accompanist-insets:0.30.1"
+google-accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref="googleAccompanist" }
+google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref="googleAccompanist" }
+google-accompanist-appcompat-theme = { module = "com.google.accompanist:accompanist-appcompat-theme", version.ref="googleAccompanist" }
+google-accompanist-pager-lib = { module = "com.google.accompanist:accompanist-pager", version.ref="googleAccompanist" }
+google-accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref="googleAccompanist" }
+
+androidx-lifecycle-viewmodel-ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+androidx-lifecycle-livedata-ktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.7.0"
+
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-animation = { module = "androidx.compose.animation:animation" }
+androidx-compose-material-lib = { module = "androidx.compose.material:material" }
+androidx-compose-material-3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+androidx-compose-ui-tooling-lib = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-tooling-preview-lib = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-tooling-preview-android = "androidx.compose.ui:ui-tooling-preview-android:1.6.5"
+androidx-compose-ui-lib = { module = "androidx.compose.ui:ui" }
+
+androidx-activity-compose = "androidx.activity:activity-compose:1.8.2"
+androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0"
+androidx-navigation-compose = "androidx.navigation:navigation-compose:2.7.7"
+androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+androidx-hilt-navigation-compose = "androidx.hilt:hilt-navigation-compose:1.2.0"
+coil-compose = "io.coil-kt:coil-compose:2.6.0"
+
+androidx-navigation-ui-ktx = "androidx.navigation:navigation-ui-ktx:2.7.7"
+androidx-navigation-fragment-ktx = "androidx.navigation:navigation-fragment-ktx:2.7.7"
+androidx-viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
+androidx-datastore-preferences = "androidx.datastore:datastore-preferences:1.0.0"
+androidx-recyclerview = "androidx.recyclerview:recyclerview:1.3.2"
+androidx-annotation = "androidx.annotation:annotation:1.7.1"
+androidx-constraintlayout-lib = "androidx.constraintlayout:constraintlayout:2.1.4"
+androidx-browser = "androidx.browser:browser:1.8.0"
+androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+
+[bundles]
+accompanist = [
+    "google-accompanist-insets-lib",
+    "google-accompanist-insets-ui",
+    "google-accompanist-systemuicontroller",
+    "google-accompanist-appcompat-theme",
+    "google-accompanist-pager-lib",
+    "google-accompanist-pager-indicators"
+]
+
+android = [
+    "androidx-core-ktx",
+    "androidx-activity-ktx",
+    "androidx-fragment-ktx",
+    "androidx-appcompat-ktx",
+    "androidx-legacy-v4",
+]
+
+compose = [
+    "androidx-compose-animation",
+    "androidx-compose-material-3",
+    "androidx-compose-material-lib",
+    "androidx-compose-material-icons-extended",
+    "androidx-compose-ui-tooling-lib",
+    "androidx-compose-ui-tooling-preview-lib",
+    "androidx-compose-ui-tooling-preview-android",
+    "androidx-compose-ui-lib",
+    "androidx-constraintlayout-compose",
+    "androidx-activity-compose",
+    "androidx-lifecycle-viewmodel-compose",
+    "androidx-navigation-compose",
+    "androidx-hilt-navigation-compose",
+    "coil-compose"
+]
+
+networking = [
+    "retrofit-lib",
+    "retrofit-converter-gson",
+    "gson-lib",
+    "okhttp-lib",
+    "okhttp-logging"
+]
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+

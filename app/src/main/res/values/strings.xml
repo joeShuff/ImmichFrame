@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ImmichFrame</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <string name="homeapp_already_set">ImmichFrame is the launcher app!</string>
+    <string name="homeapp_needs_setting">Set ImmichFrame as Launcher App</string>
+</resources>
