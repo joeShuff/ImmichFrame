@@ -1,14 +1,19 @@
 package uk.co.joeshuff.immichframe.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import uk.co.joeshuff.immichframe.prefs.ImmichFrameConfigController
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(): ViewModel() {
+class SettingsViewModel @Inject constructor(
+    private val configController: ImmichFrameConfigController
+): ViewModel() {
 
     //region Home App Settings
     private val _appIsHomeApp: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -36,23 +41,27 @@ class SettingsViewModel @Inject constructor(): ViewModel() {
 
     //endregion
 
-    fun loadConfig() {
-        //todo: load from storage
+    fun loadConfig() = viewModelScope.launch {
+        _immichUrl.update { configController.getKeyValue(ImmichFrameConfigController.IMMICH_URL_KEY) }
+         _immichToken.update { configController.getKeyValue(ImmichFrameConfigController.IMMICH_API_TOKEN_KEY) }
     }
 
     fun verifyServer() {
+        storeFieldsInPrefs()
+    }
 
+    private fun storeFieldsInPrefs() = viewModelScope.launch {
+        configController.setKeyValue(ImmichFrameConfigController.IMMICH_URL_KEY, _immichUrl.value)
+        configController.setKeyValue(ImmichFrameConfigController.IMMICH_API_TOKEN_KEY, _immichToken.value)
     }
 
     fun setUrlValue(url: String) {
         _immichUrl.update { url }
         //todo: validity
-        //todo: Store value
     }
 
     fun setToken(token: String) {
         _immichToken.update { token }
-        //todo: store
     }
 
     fun setAppIsHomeApp(isHomeApp: Boolean) {

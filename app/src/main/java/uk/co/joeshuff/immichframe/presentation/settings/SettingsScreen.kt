@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -30,6 +31,10 @@ fun SettingsScreen(
     viewModel: SettingsViewModel,
     launchHomeSettings: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.loadConfig()
+    }
+
     val isAppHomeApp by viewModel.appIsHome.collectAsState()
 
     val immichUrl by viewModel.immichUrl.collectAsState()

@@ -1,6 +1,6 @@
 [versions]
 agp = "8.3.1"
-kotlin = "1.9.0"
+kotlin = "1.9.23"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -34,8 +34,8 @@ okhttp-logging = "com.squareup.okhttp3:logging-interceptor:4.12.0"
 
 gson-lib = "com.google.code.gson:gson:2.10.1"
 
-dagger-hilt-lib = "com.google.dagger:hilt-android:2.49"
-dagger-hilt-compiler = "com.google.dagger:hilt-android-compiler:2.46.1"
+dagger-hilt-lib = "com.google.dagger:hilt-android:2.51.1"
+dagger-hilt-compiler = "com.google.dagger:hilt-android-compiler:2.51.1"
 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion"}
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
@@ -43,7 +43,6 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVer
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
 
 datastore = "androidx.datastore:datastore-preferences:1.0.0"
-
 
 androidx-legacy-v4 = "androidx.legacy:legacy-support-v4:1.0.0"
 androidx-activity-ktx = "androidx.activity:activity-ktx:1.8.2"
