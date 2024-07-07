@@ -33,7 +33,7 @@ class PreferenceDataStoreHelper(private val dataSource: DataStore<Preferences>) 
 
     /* This returns the last saved value of the key. If we change the value,
     it wont effect the values produced by this function */
-    override suspend fun <T> getFirstPreference(key: Preferences.Key<T>, defaultValue: T): T =
+    override suspend fun <T> getFirstPreference(key: Preferences.Key<T>, defaultValue: T?): T? =
         dataSource.data.first()[key] ?: defaultValue
 
     // This Sets the value based on the value passed in value parameter.
