@@ -1,6 +1,5 @@
 package uk.co.joeshuff.immichframe.data.api
 
-import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Protocol
 import okhttp3.Response
@@ -9,7 +8,6 @@ import uk.co.joeshuff.immichframe.prefs.ImmichFrameConfigController
 import uk.co.joeshuff.immichframe.util.findPort
 import uk.co.joeshuff.immichframe.util.findResource
 import uk.co.joeshuff.immichframe.util.findScheme
-import java.io.IOException
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
@@ -21,7 +19,8 @@ class HostChangeInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        config.cachedServerAddress.let { host ->
+        val url = config.getKeyValue(ImmichFrameConfigController.IMMICH_URL_KEY)
+        url?.let { host ->
             try {
                 val newUrlBuilder = request.url.newBuilder()
                     .scheme(host.findScheme()?.replace("://", "") ?: "https")

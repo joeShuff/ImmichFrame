@@ -4,29 +4,31 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import uk.co.joeshuff.immichframe.domain.usecases.VerifyTokenUseCase
 import uk.co.joeshuff.immichframe.prefs.ImmichFrameConfigController
-import uk.co.joeshuff.immichframe.util.ApiResult
 import uk.co.joeshuff.immichframe.util.Status
+import uk.co.joeshuff.immichframe.util.toBaseUrl
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val configController: ImmichFrameConfigController,
     private val verifyTokenUseCase: VerifyTokenUseCase
-): ViewModel() {
+) : ViewModel() {
 
     sealed class VerifyServerState {
-        data object Presenting: VerifyServerState()
-        data object Success: VerifyServerState()
-        data object Loading: VerifyServerState()
-        data class Error(val errorMessage: String): VerifyServerState()
+        data object Presenting : VerifyServerState()
+        data object Success : VerifyServerState()
+        data object Loading : VerifyServerState()
+        data class Error(val errorMessage: String) : VerifyServerState()
     }
 
-    private val _verifyState: MutableStateFlow<VerifyServerState> = MutableStateFlow(VerifyServerState.Presenting)
+    private val _verifyState: MutableStateFlow<VerifyServerState> =
+        MutableStateFlow(VerifyServerState.Presenting)
     val verifyState = _verifyState.asStateFlow()
 
     //region Home App Settings
@@ -53,27 +55,39 @@ class SettingsViewModel @Inject constructor(
     val tokenFieldEnabled = _tokenFieldEnabled.asStateFlow()
     //endregion
 
+    //region Validated user
+    private val _loggedInUser: MutableStateFlow<String?> = MutableStateFlow(null)
+    val loggedInUser: StateFlow<String?> = _loggedInUser.asStateFlow()
+    //endregion
+
     fun loadConfig() = viewModelScope.launch {
-        _immichUrl.update { configController.getKeyValue(ImmichFrameConfigController.IMMICH_URL_KEY) }
-         _immichToken.update { configController.getKeyValue(ImmichFrameConfigController.IMMICH_API_TOKEN_KEY) }
+        _immichUrl.update {
+            configController.getKeyValueAsync(ImmichFrameConfigController.IMMICH_URL_KEY) ?: ""
+        }
+        _immichToken.update {
+            configController.getKeyValueAsync(ImmichFrameConfigController.IMMICH_API_TOKEN_KEY)
+                ?: ""
+        }
+        _loggedInUser.update { configController.getKeyValueAsync(ImmichFrameConfigController.IMMICH_LOGGED_IN_USER_NAME) }
     }
 
     fun verifyServer() = viewModelScope.launch {
-        configController.setCachedAddress(_immichUrl.value)
-
         _verifyState.update { VerifyServerState.Loading }
         _urlFieldEnabled.update { false }
         _tokenFieldEnabled.update { false }
 
-        val verificationResponse = verifyTokenUseCase(_immichToken.value)
+        val url = _immichUrl.value.toBaseUrl()
+        val verificationResponse = verifyTokenUseCase(url, _immichToken.value)
 
         when (verificationResponse.status) {
             Status.SUCCESS -> {
                 _verifyState.update { VerifyServerState.Success }
+                verificationResponse.data?.name?.let { showVerifiedUser(it) }
                 storeFieldsInPrefs()
             }
+
             Status.ERROR -> {
-                _verifyState.update { VerifyServerState.Error(verificationResponse.message?: "") }
+                _verifyState.update { VerifyServerState.Error(verificationResponse.message ?: "") }
             }
         }
 
@@ -81,10 +95,17 @@ class SettingsViewModel @Inject constructor(
         _tokenFieldEnabled.update { true }
     }
 
-    private fun storeFieldsInPrefs() = viewModelScope.launch {
-        configController.setCachedAddress(_immichUrl.value)
+    private suspend fun showVerifiedUser(name: String) {
+        _loggedInUser.update { name }
+        configController.setKeyValue(ImmichFrameConfigController.IMMICH_LOGGED_IN_USER_NAME, name)
+    }
+
+    private suspend fun storeFieldsInPrefs() {
         configController.setKeyValue(ImmichFrameConfigController.IMMICH_URL_KEY, _immichUrl.value)
-        configController.setKeyValue(ImmichFrameConfigController.IMMICH_API_TOKEN_KEY, _immichToken.value)
+        configController.setKeyValue(
+            ImmichFrameConfigController.IMMICH_API_TOKEN_KEY,
+            _immichToken.value
+        )
     }
 
     fun setUrlValue(url: String) {

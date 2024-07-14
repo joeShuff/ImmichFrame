@@ -1,10 +1,10 @@
 package uk.co.joeshuff.immichframe.domain.repository
 
 import uk.co.joeshuff.immichframe.util.ImmichResult
-import uk.co.joeshuff.immichframe.domain.model.ValidateAccessTokenResponse
+import uk.co.joeshuff.immichframe.domain.model.ValidateUserResponse
 
 interface ImmichVerificationRepository {
 
-    suspend fun verifyAccessToken(token: String): ImmichResult<ValidateAccessTokenResponse>
+    suspend fun verifyAccessToken(url: String, token: String): ImmichResult<ValidateUserResponse>
 
 }

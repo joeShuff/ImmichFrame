@@ -48,6 +48,8 @@ fun SettingsScreen(
     val urlEnabled by viewModel.urlFieldEnabled.collectAsState()
     val urlValid by viewModel.immichUrlValidity.collectAsState()
 
+    val loggedInUser by viewModel.loggedInUser.collectAsState()
+    
     val immichToken by viewModel.immichToken.collectAsState()
     val tokenEnabled by viewModel.tokenFieldEnabled.collectAsState()
 
@@ -66,10 +68,11 @@ fun SettingsScreen(
             label = { Text("Immich URL") },
             enabled = urlEnabled,
             value = immichUrl,
+            singleLine = true,
             onValueChange = viewModel::setUrlValue,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             ),
             isError = !urlValid
         )
@@ -79,6 +82,7 @@ fun SettingsScreen(
             label = { Text("Immich Token") },
             enabled = tokenEnabled,
             value = immichToken,
+            singleLine = true,
             onValueChange = viewModel::setToken,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -93,6 +97,10 @@ fun SettingsScreen(
             else -> Color.Blue
         }
 
+        loggedInUser?.let { 
+            Text(text = "Logged in as $it", color = Color.Green)
+        }
+        
         Button(
             modifier = Modifier
                 .fillMaxWidth(),
