@@ -1,5 +1,7 @@
 package uk.co.joeshuff.immichframe.presentation.settings
 
+import android.widget.Spinner
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,8 +11,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -24,18 +29,29 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import uk.co.joeshuff.immichframe.R
 import uk.co.joeshuff.immichframe.presentation.components.Separator
 import uk.co.joeshuff.immichframe.viewmodels.SettingsViewModel
+import uk.co.joeshuff.immichframe.viewmodels.SettingsViewModel.VerifyServerState
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
     launchHomeSettings: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.loadConfig()
+    }
+
     val isAppHomeApp by viewModel.appIsHome.collectAsState()
 
+    val verifyState by viewModel.verifyState.collectAsState()
+
     val immichUrl by viewModel.immichUrl.collectAsState()
+    val urlEnabled by viewModel.urlFieldEnabled.collectAsState()
     val urlValid by viewModel.immichUrlValidity.collectAsState()
 
+    val loggedInUser by viewModel.loggedInUser.collectAsState()
+    
     val immichToken by viewModel.immichToken.collectAsState()
+    val tokenEnabled by viewModel.tokenFieldEnabled.collectAsState()
 
     Column(
         modifier = Modifier
@@ -50,11 +66,13 @@ fun SettingsScreen(
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Immich URL") },
+            enabled = urlEnabled,
             value = immichUrl,
+            singleLine = true,
             onValueChange = viewModel::setUrlValue,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Uri,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
             ),
             isError = !urlValid
         )
@@ -62,7 +80,9 @@ fun SettingsScreen(
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Immich Token") },
+            enabled = tokenEnabled,
             value = immichToken,
+            singleLine = true,
             onValueChange = viewModel::setToken,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -71,8 +91,30 @@ fun SettingsScreen(
             isError = immichToken.isEmpty()
         )
 
-        Button(modifier = Modifier.fillMaxWidth(), onClick = viewModel::verifyServer) {
-            Text(color = Color.White, text = "Verify Server Connection")
+        val buttonColor = when (verifyState) {
+            is VerifyServerState.Success -> Color.Green
+            is VerifyServerState.Error -> Color.Red
+            else -> Color.Blue
+        }
+
+        loggedInUser?.let { 
+            Text(text = "Logged in as $it", color = Color.Green)
+        }
+        
+        Button(
+            modifier = Modifier
+                .fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = buttonColor
+            ),
+            enabled = verifyState != VerifyServerState.Loading,
+            onClick = viewModel::verifyServer
+        ) {
+            if (verifyState == VerifyServerState.Loading) {
+                CircularProgressIndicator()
+            } else {
+                Text(color = Color.White, text = "Verify Server Connection")
+            }
         }
     }
 }
