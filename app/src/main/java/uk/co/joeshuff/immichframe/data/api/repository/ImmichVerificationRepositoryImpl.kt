@@ -12,13 +12,13 @@ class ImmichVerificationRepositoryImpl @Inject constructor(
     private val api: ImmichUnauthorizedAPI
 ) : ImmichVerificationRepository {
 
-    override suspend fun verifyAccessToken(
+    override suspend fun validateUser(
         url: String,
         token: String
     ): ImmichResult<ValidateUserResponse> {
         val response = makeApiRequest {
             api.validateUser(
-                url + ImmichUnauthorizedAPI.VALIDATE_TOKEN_API,
+                url + ImmichUnauthorizedAPI.VALIDATE_USER_ENDPOINT,
                 token
             )
         }

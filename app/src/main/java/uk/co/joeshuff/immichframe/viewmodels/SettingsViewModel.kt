@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import uk.co.joeshuff.immichframe.domain.usecases.VerifyTokenUseCase
+import uk.co.joeshuff.immichframe.domain.usecases.ValidateUserUserCase
 import uk.co.joeshuff.immichframe.prefs.ImmichFrameConfigController
 import uk.co.joeshuff.immichframe.util.Status
 import uk.co.joeshuff.immichframe.util.toBaseUrl
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val configController: ImmichFrameConfigController,
-    private val verifyTokenUseCase: VerifyTokenUseCase
+    private val validateUserUserCase: ValidateUserUserCase
 ) : ViewModel() {
 
     sealed class VerifyServerState {
@@ -77,7 +77,7 @@ class SettingsViewModel @Inject constructor(
         _tokenFieldEnabled.update { false }
 
         val url = _immichUrl.value.toBaseUrl()
-        val verificationResponse = verifyTokenUseCase(url, _immichToken.value)
+        val verificationResponse = validateUserUserCase(url, _immichToken.value)
 
         when (verificationResponse.status) {
             Status.SUCCESS -> {

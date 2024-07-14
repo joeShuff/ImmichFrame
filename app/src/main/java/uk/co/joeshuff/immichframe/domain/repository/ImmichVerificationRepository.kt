@@ -5,6 +5,6 @@ import uk.co.joeshuff.immichframe.domain.model.ValidateUserResponse
 
 interface ImmichVerificationRepository {
 
-    suspend fun verifyAccessToken(url: String, token: String): ImmichResult<ValidateUserResponse>
+    suspend fun validateUser(url: String, token: String): ImmichResult<ValidateUserResponse>
 
 }
