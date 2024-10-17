@@ -22,7 +22,7 @@
             android:label="@string/title_activity_settings"
             android:theme="@style/Theme.ImmichFrame" />
         <activity
-            android:name=".MainActivity"
+            android:name=".FrameActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:label="@string/app_name"

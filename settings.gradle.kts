@@ -17,6 +17,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("testLibs") {
+            from(files("gradle/test-libs.versions.toml"))
+        }
+    }
 }
 
 rootProject.name = "ImmichFrame"

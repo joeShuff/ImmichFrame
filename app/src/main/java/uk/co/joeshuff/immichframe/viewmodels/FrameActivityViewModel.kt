@@ -16,6 +16,8 @@ class FrameActivityViewModel @Inject constructor(
 ): ViewModel() {
 
     sealed class State {
+        data object Loading: State()
+
         sealed class OnboardingRequired: State() {
             data object NoServer: OnboardingRequired()
             data object NoMediaSource: OnboardingRequired()
@@ -24,12 +26,8 @@ class FrameActivityViewModel @Inject constructor(
         data object DisplayMedia: State()
     }
 
-    private val _state: MutableStateFlow<State> = MutableStateFlow(State.DisplayMedia)
+    private val _state: MutableStateFlow<State> = MutableStateFlow(State.Loading)
     val state = _state.asStateFlow()
-
-    init {
-        calculateState()
-    }
 
     /**
      * This function will check the state of the app to decide whether any onboarding is needed
@@ -38,7 +36,7 @@ class FrameActivityViewModel @Inject constructor(
     fun calculateState() = viewModelScope.launch {
         val isLoggedIn =  getIsLoggedInUseCase()
 
-        if (isLoggedIn) {
+        if (!isLoggedIn) {
             _state.update { State.OnboardingRequired.NoServer }
             return@launch
         }

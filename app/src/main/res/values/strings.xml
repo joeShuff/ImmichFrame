@@ -4,4 +4,8 @@
 
     <string name="homeapp_already_set">ImmichFrame is the launcher app!</string>
     <string name="homeapp_needs_setting">Set ImmichFrame as Launcher App</string>
+
+    <string name="onboarding_noserver_title">No Server Currently Configured</string>
+    <string name="onboarding_noserver_subtitle">You currently have no server configured to fetch media from. Please head over to settings to set this up.</string>
+    <string name="onboarding_launchsettings">Launch Settings</string>
 </resources>
