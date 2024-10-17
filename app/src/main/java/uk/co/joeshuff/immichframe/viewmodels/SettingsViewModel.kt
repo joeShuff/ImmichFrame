@@ -9,15 +9,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import uk.co.joeshuff.immichframe.domain.usecases.ValidateUserUserCase
-import uk.co.joeshuff.immichframe.prefs.ImmichFrameConfigController
+import uk.co.joeshuff.immichframe.prefs.usecases.GetLoggedInUserUseCase
+import uk.co.joeshuff.immichframe.prefs.usecases.GetServerAPITokenUseCase
+import uk.co.joeshuff.immichframe.prefs.usecases.GetServerUrlUseCase
+import uk.co.joeshuff.immichframe.prefs.usecases.SetIsLoggedInUseCase
+import uk.co.joeshuff.immichframe.prefs.usecases.SetLoggedInUserUseCase
+import uk.co.joeshuff.immichframe.prefs.usecases.SetServerDetailsUseCase
 import uk.co.joeshuff.immichframe.util.Status
 import uk.co.joeshuff.immichframe.util.toBaseUrl
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val configController: ImmichFrameConfigController,
-    private val validateUserUserCase: ValidateUserUserCase
+    private val validateUserUserCase: ValidateUserUserCase,
+    private val getServerUrlUseCase: GetServerUrlUseCase,
+    private val getServerAPITokenUseCase: GetServerAPITokenUseCase,
+    private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
+    private val setServerDetailsUseCase: SetServerDetailsUseCase,
+    private val setLoggedInUserUseCase: SetLoggedInUserUseCase,
+    private val setLoggedInUseCase: SetIsLoggedInUseCase
 ) : ViewModel() {
 
     sealed class VerifyServerState {
@@ -61,14 +71,9 @@ class SettingsViewModel @Inject constructor(
     //endregion
 
     fun loadConfig() = viewModelScope.launch {
-        _immichUrl.update {
-            configController.getKeyValueAsync(ImmichFrameConfigController.IMMICH_URL_KEY) ?: ""
-        }
-        _immichToken.update {
-            configController.getKeyValueAsync(ImmichFrameConfigController.IMMICH_API_TOKEN_KEY)
-                ?: ""
-        }
-        _loggedInUser.update { configController.getKeyValueAsync(ImmichFrameConfigController.IMMICH_LOGGED_IN_USER_NAME) }
+        _immichUrl.update { getServerUrlUseCase() ?: "" }
+        _immichToken.update { getServerAPITokenUseCase() ?: "" }
+        _loggedInUser.update { getLoggedInUserUseCase() }
     }
 
     fun verifyServer() = viewModelScope.launch {
@@ -97,15 +102,12 @@ class SettingsViewModel @Inject constructor(
 
     private suspend fun showVerifiedUser(name: String) {
         _loggedInUser.update { name }
-        configController.setKeyValue(ImmichFrameConfigController.IMMICH_LOGGED_IN_USER_NAME, name)
+        setLoggedInUserUseCase(name)
+        setLoggedInUseCase(true)
     }
 
     private suspend fun storeFieldsInPrefs() {
-        configController.setKeyValue(ImmichFrameConfigController.IMMICH_URL_KEY, _immichUrl.value)
-        configController.setKeyValue(
-            ImmichFrameConfigController.IMMICH_API_TOKEN_KEY,
-            _immichToken.value
-        )
+        setServerDetailsUseCase(_immichUrl.value, _immichToken.value)
     }
 
     fun setUrlValue(url: String) {
